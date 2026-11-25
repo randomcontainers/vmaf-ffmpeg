@@ -58,7 +58,16 @@ gh attestation verify oci://ghcr.io/randomcontainers/vmaf-ffmpeg:latest \
   --repo randomcontainers/vmaf-ffmpeg --signer-repo randomcontainers/ci
 ```
 
-Images from `ghcr.io/randomcontainers/vmaf` are built in [randomcontainers/vmaf](https://github.com/randomcontainers/vmaf), so verify them with `--repo randomcontainers/vmaf --signer-repo randomcontainers/ci`.
+Each image also has a keyless cosign signature from the same workflow, for admission controllers that check cosign signatures:
+
+```sh
+cosign verify ghcr.io/randomcontainers/vmaf-ffmpeg:latest \
+  --certificate-identity https://github.com/randomcontainers/ci/.github/workflows/build.yml@refs/tags/v1 \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-github-workflow-repository randomcontainers/vmaf-ffmpeg
+```
+
+Images from `ghcr.io/randomcontainers/vmaf` are built in [randomcontainers/vmaf](https://github.com/randomcontainers/vmaf), so name that repository in `--repo` and `--certificate-github-workflow-repository`.
 
 ## Updates
 
